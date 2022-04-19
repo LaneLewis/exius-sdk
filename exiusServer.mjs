@@ -156,7 +156,7 @@ export class ExiusServer {
     async writeFile(endpoint, path, content){
         try{
             this.checkEndpoint(endpoint)
-            return await this.client.putFileContents("/"+endpoint+"/"+path, content,{contentLength:false})
+            return await this.client.putFileContents("/"+endpoint+"/"+path, content,{contentLength:false, overwrite:true})
         }catch(e){
             errorHandler(e)
         }
