@@ -2,6 +2,7 @@ import {createClient} from "webdav"
 import { Buffer } from 'buffer';
 import fetch from "node-fetch"
 // add abstraction layer for actual server or local
+//add remove directory
 export class ExiusServer {
     constructor(url, key){
         this.url = url
