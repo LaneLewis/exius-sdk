@@ -3,6 +3,11 @@
   "version": "1.0.8",
   "description": "",
   "main": "exiusServer.mjs",
+  "exports": {
+    ".": "./exiusServer.mjs",
+    "./web-nocomp" :"./exiusServerNoComp.mjs",
+    "./web" : "./dist/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"

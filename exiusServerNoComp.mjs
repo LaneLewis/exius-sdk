@@ -1,4 +1,4 @@
-import webdav from "./node_modules/webdav/web/index.js"
+import webdav from "webdav/web";
 import buffer from 'buffer';
 
 // add abstraction layer for actual server or local
