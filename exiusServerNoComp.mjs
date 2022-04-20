@@ -1,5 +1,5 @@
 import webdav from "webdav/web";
-import buffer from 'buffer';
+import buffer from 'buffer/';
 export class ExiusServer {
     constructor(url, key){
         this.url = url
