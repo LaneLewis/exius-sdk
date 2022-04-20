@@ -1,13 +1,13 @@
 {
   "name": "exius",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "",
   "main": "exiusServer.mjs",
   "exports": {
     ".": "./exiusServer.mjs",
     "./web-nocomp": "./exiusServerNoComp.mjs",
     "./web": "./dist/index.js",
-    "./package" : "./package.json"
+    "./package": "./package.json"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
