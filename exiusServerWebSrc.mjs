@@ -18,7 +18,7 @@ export class ExiusServer {
         this.doesResourceExist = this.doesResourceExist.bind(this)
         this.writeFile = this.writeFile.bind(this)
         this.checkEndpoint = this.checkEndpoint.bind(this)
-        this.client = createClient(url+"/files/",{
+        this.client = webdav.createClient(url+"/files/",{
             username:"",
             password:key.KeyValue
         })
@@ -39,7 +39,7 @@ export class ExiusServer {
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json',
-                  'Authorization': 'Basic ' + Buffer.from(":" + this.key.KeyValue,"utf8").toString("base64")
+                  'Authorization': 'Basic ' + buffer.Buffer.from(":" + this.key.KeyValue,"utf8").toString("base64")
                 },
                 body: JSON.stringify(params)
               })
@@ -60,7 +60,7 @@ export class ExiusServer {
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json',
-                  'Authorization': 'Basic ' + Buffer.from(":" + this.passcode,"utf8").toString("base64")
+                  'Authorization': 'Basic ' + buffer.Buffer.from(":" + this.passcode,"utf8").toString("base64")
                 }
               })
               if (res.status == 200){
@@ -79,7 +79,7 @@ export class ExiusServer {
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json',
-                  'Authorization': 'Basic ' + Buffer.from(":" + this.key.KeyValue,"utf8").toString("base64")
+                  'Authorization': 'Basic ' + buffer.Buffer.from(":" + this.key.KeyValue,"utf8").toString("base64")
                 }
               })
               if (res.status == 200 || res.status == 201){
@@ -188,7 +188,7 @@ export async function getKey(url, key){
             headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + Buffer.from(":" + key,"utf8").toString("base64")
+            'Authorization': 'Basic ' + buffer.Buffer.from(":" + key,"utf8").toString("base64")
             },
         })
         if (res.status == 201 || res.status == 200){
