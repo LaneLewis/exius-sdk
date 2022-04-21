@@ -63,7 +63,7 @@ export class ExiusServer {
                 headers: {
                   'Accept': 'application/json, text/plain, */*',
                   'Content-Type': 'application/json',
-                  'Authorization': 'Basic ' + Buffer.from(":" + this.passcode,"utf8").toString("base64")
+                  'Authorization': 'Basic ' + Buffer.from(":" + this.key.keyValue,"utf8").toString("base64")
                 }
               })
               if (res.status == 200){
