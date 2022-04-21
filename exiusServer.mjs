@@ -97,7 +97,7 @@ export class ExiusServer {
     async mkDir(endpoint, path){
         try{
             this.checkEndpoint(endpoint)
-            await this.client.createDirectory("/"+endpoint+"/"+path, {recursive:true})
+            console.log(await this.client.createDirectory("/"+endpoint+"/"+path, {recursive:true}))
             return true
         }catch(e){
             errorHandler(e)
