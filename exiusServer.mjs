@@ -26,6 +26,13 @@ export class ExiusServer {
             password:key.KeyValue
         })
     }
+    /**
+     * Establishes a connection to an exius server
+     * @constructor 
+     * @param {string} url - url of exius server
+     * @param {string} keyValue - key to use as the "user" when doing operations
+     * @returns {ExiusServer}
+     */
     static async init(url, keyValue){
         try{
             let key = await getKey(url, keyValue)
@@ -35,6 +42,33 @@ export class ExiusServer {
             throw e
         }
     }
+    /**
+     * @param {object} params 
+     * @param {bool} params.CanCreateChild - can created key make new keys 
+     * @param {string} params.InitiateExpire - 
+     * @param {number} params.ExpireDelta
+     * @param {object} params.Endpoints
+     * @param {string} params.Endpoints.[endpoint:string].Path - relative file path for endpoint
+     * @param {number=2147483647} params.Endpoints.[endpoint:string].[MaxMkcol] - maximum number of allowed Mkcol ops from added key endpoint
+     * @param {number=2147483647} params.Endpoints.[endpoint:string].[MaxPut] - maximum number of allowed Put ops from added key endpoint
+     * @param {number=9223372036854775807} params.Endpoints.[endpoint:string].[MaxPutSize] - maximum byte size of Put op from added key endpoint
+     * @param {number=2147483647} params.Endpoints.[endpoint:string].[MaxGet=2147483647] - maximum number of Get ops from added key endpoint
+     * @param {Array{string}=["any"]} params.Endpoints.[endpoint:string].[PutTypes] - types allowed to be uploaded, can be any any standard encoding or any
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Copy] - is Copy webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Delete] - is Delete webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Get] - is Get webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Head] - is Head webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Lock] - is Lock webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Mkcol] - is Mkcol webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Move] - is Move webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Options] - is Options webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Post] - is Post webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Propfind] - is Propfind webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Put] - is Put webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Trace] - is Trace webdav operation allowed
+     * @param {boolean=false} params.Endpoints.[endpoint:string].[Unlock] - is Unlock webdav operation allowed
+     * @returns {object}
+     */
     async addKey(params){
         try{
             let res = await fetch(this.url+"/addKey", {
@@ -56,6 +90,10 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * deletes key
+     * @returns {boolean} - was key deleted successfully
+     */
     async deleteKey(){
         try{
             let res = await fetch(this.url+"/deleteKey", {
@@ -75,6 +113,13 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * gets the relative paths of all child keys which are defined as having 
+     * less or equal webdav permissions on the or subsets of the same directories. They 
+     * are returned along with a list of their endpoint's relative paths from an 
+     * endpoint owned by the key. 
+     * @returns {object}
+     */
     async getChildKeys(){
         try{
             let res = await fetch(this.url+"/getChildKeys", {
@@ -94,6 +139,12 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * makes a directory using this key off of owned endpoint via a relative path
+     * @param {string} endpoint - endpoint owned by this key
+     * @param {string} path - relative path from endpoint to make directory on
+     * @returns {boolean}
+     */
     async mkDir(endpoint, path){
         try{
             this.checkEndpoint(endpoint)
@@ -103,6 +154,12 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * reads file from key's owned endpoint's relative path and returns it as a string/buffer
+     * @param {string} endpoint - endpoint owned by this key 
+     * @param {string} path - relative path from endpoint to read file from
+     * @returns {string | Buffer}
+     */
     async readFile(endpoint, path){
         try{
             this.checkEndpoint(endpoint)
@@ -111,6 +168,13 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * 
+     * @param {string} endpoint - endpoint owned by this key
+     * @param {string} fromPath - relative path from endpoint to copy from
+     * @param {string} toPath  - relative path from endpoint to copy to
+     * @returns {boolean}
+     */
     async copyFile(endpoint, fromPath, toPath){
         try{
             this.checkEndpoint(endpoint)
@@ -120,7 +184,13 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
-    async moveFile(fromPath, toPath){
+    /**
+     * @param {string} endpoint - endpoint owned by this key
+     * @param {string} fromPath - relative path from endpoint to move from
+     * @param {string} toPath - relative path from endpoint to move to
+     * @returns {boolean}
+     */
+    async moveFile(endpoint, fromPath, toPath){
         try{
             this.checkEndpoint(endpoint)
             await this.client.moveFile("/"+endpoint+"/"+fromPath, "/"+endpoint+"/"+toPath)
@@ -129,15 +199,27 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * 
+     * @param {string} endpoint - endpoint owned by this key
+     * @param {string} path - relative path from endpoint to file to delete
+     * @returns {boolean}
+     */
     async deleteFile(endpoint,path){
         try{
             this.checkEndpoint(endpoint)
-            return await this.client.deleteFile("/"+endpoint+"/"+path)
+            await this.client.deleteFile("/"+endpoint+"/"+path)
             return true
         }catch(e){
             errorHandler(e)
         }
     }
+    /**
+     * 
+     * @param {string} endpoint - endpoint owned by this key
+     * @param {string} path - relative path from endpoint to the directory to be listed
+     * @returns {Array{FileStat}}
+     */
     async lsDir(endpoint, path){
         try{
             this.checkEndpoint(endpoint)
@@ -146,6 +228,12 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * 
+     * @param {string} endpoint 
+     * @param {string} path 
+     * @returns 
+     */
     async doesResourceExist(endpoint, path){
         try{
             this.checkEndpoint(endpoint)
@@ -154,6 +242,13 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * 
+     * @param {string} endpoint 
+     * @param {string} path 
+     * @param {string} content 
+     * @returns 
+     */
     async writeFile(endpoint, path, content){
         try{
             this.checkEndpoint(endpoint)
@@ -162,6 +257,11 @@ export class ExiusServer {
             errorHandler(e)
         }
     }
+    /**
+     * 
+     * @param {string} endpoint 
+     * @returns 
+     */
     async checkEndpoint(endpoint){
         if (!Object.keys(this.key.Endpoints).includes(endpoint)){
             throw Error("endpoint not in key endpoints")
@@ -169,6 +269,10 @@ export class ExiusServer {
         return true
     }
 }
+/**
+ * 
+ * @param {Error} e 
+ */
 function errorHandler(e){
     if (e.message == "404"){
         throw Error(`Server Not Found: Check that your server is up and 
