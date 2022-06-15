@@ -270,7 +270,7 @@ export class ExiusServer {
     }
 }
 /**
- * Generic error handler used by all functoins to explain 404 and 401
+ * Generic error handler used by all functions to explain 404 and 401
  * @param {Error} e 
  */
 function errorHandler(e){

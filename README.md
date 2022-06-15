@@ -4,3 +4,4 @@ Package install:
 ```
 npm install exius
 ```
+### Documentation Coming Soon!
